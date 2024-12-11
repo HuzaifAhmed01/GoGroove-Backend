@@ -1,19 +1,27 @@
 import userModel from "../model/userModel.js";
 
 //for user Create
-export let userCreateService = async (firstName,lastName,email, password, phone) => {
+export let userCreateService = async (
+  firstName,
+  lastName,
+  email,
+  password,
+  phone
+) => {
   try {
-    // FINDING USER IF ALREADY EXIST
     let user = await userModel.findOne({ email });
 
-    if (user) {
-      //RETURNING ERROR TO CONTROLLER IF EXIST
-      return "error";
-    } else {
-      // CREATING NEW USER IF USER NOT FOUND
-      let newUser = await userModel({ name, email, password, phone });
+    if (!user) {
+    
+      let newUser = await userModel({
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+      });
       let savedUser = await newUser.save();
-      return "success";
+      return savedUser;
     }
   } catch (error) {
     console.log(
@@ -23,17 +31,13 @@ export let userCreateService = async (firstName,lastName,email, password, phone)
   }
 };
 
-//For finding user for Email
 export let findingUserByEmail = async (email) => {
   try {
-    //Finding user via email
     let user = await userModel.findOne({ email });
-    //Returning user's password by following condition
     if (user) {
       return user;
     }
   } catch (error) {
-    //Error Handeling
     console.log("error occured while logging user at services" + error.message);
   }
 };

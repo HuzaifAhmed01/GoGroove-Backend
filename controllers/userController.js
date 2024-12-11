@@ -9,24 +9,29 @@ import {
 //For SignUp
 export let userCreateController = async (req, res) => {
   //DESTRUCTURING OF USER DETAILS FROM REQUEST.BODY
-  let { firstName,lastName,email, password, phone} = req.body;
-  console.log(firstName,lastName,email, password, phone);
+  let { firstName, lastName, email, password, phone } = req.body;
 
   try {
     //FOR HASHING USER PASSWORD
     let HashedPassword = await HashPassword(password);
 
     //PASSING TO USER SERVICES FUNCTION IN SERVICES
-    let user = await userCreateService(name, email, HashedPassword, phone);
+    let user = await userCreateService(
+      firstName,
+      lastName,
+      email,
+      HashedPassword,
+      phone
+    );
 
+    //GENERATING TOKEN FROM HERE
     //SOME CONDITIONS FOR VALID RESPONSE
-    if (user == "success") {
-      return res.status(200).send("success");
-    } else if (user == "error") {
-      return res.status(500).send("user already exist");
-    } else {
-      return res.status(500).send("error");
+    if (user) {
+      let token = generatingToken(email);
+      console.log(token);
+      return res.status(201).json({ token, name: user.firstName });
     }
+    return res.status(500).json({ message: "user already exist" });
   } catch (error) {
     //ERROR HANDELING
     console.log(
@@ -43,7 +48,10 @@ export let userLoginController = async (req, res) => {
     let DBPassword = await findingUserByEmail(email);
     let newPassword = password;
 
-    let comparePassword = await comparePasswords(newPassword, DBPassword.password);
+    let comparePassword = await comparePasswords(
+      newPassword,
+      DBPassword.password
+    );
 
     if (comparePassword) {
       // Generating Token

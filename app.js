@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { connectDB } from "./db/connection.js";
 import userRoutes from "./routes/userRoutes.js";
-import cors from 'cors'
+import cors from "cors";
+import cluster from "cluster";
+import os from "os";
 
 //CONFIGURING DOTENV
 dotenv.config();
@@ -24,12 +26,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 //CONNECTING TO DATABASE
-connectDB(dbString, dbName);
+connectDB(dbString);
 
-// CREACTING ROUTES
-app.use("/user", userRoutes);
+let totalCpus = os.cpus().length;
 
-// CREATING SERVER
-app.listen(port, () => {
-  console.log(`server listening at http://localhost:${port}`);
-});
+if (cluster.isPrimary) {
+  for (let i = 0; i < totalCpus; i++) {
+    cluster.fork();
+  }
+} else {
+  // CREACTING ROUTES
+  app.use("/user", userRoutes);
+  // CREATING SERVER
+  app.listen(port, () => {
+    console.log(`server listening at http://localhost:${port}`);
+  });
+}
