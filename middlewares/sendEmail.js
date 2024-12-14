@@ -1,8 +1,7 @@
 import nodemailer from 'nodemailer';
 
-// Middleware to handle user creation and send notification email
 export let createUserWithEmailNotification = async (req, res, next) => {
-  let { email, firstName, } = req.body; // Destructure necessary user data
+  let { email, firstName, } = req.body; 
 
   try {
 
@@ -111,32 +110,29 @@ export let createUserWithEmailNotification = async (req, res, next) => {
 
     `;
 
-    // Step 3: Send email using Nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       port: 587,
-      secure: false, // use 465 for SSL if needed
+      secure: false, 
       auth: {
-        user: process.env.USER_EMAIL, // Your email from environment variables
-        pass: process.env.USER_PASS, // Your email password or app password
+        user: process.env.USER_EMAIL, 
+        pass: process.env.USER_PASS, 
       },
     });
 
     const info = await transporter.sendMail({
-      from: process.env.USER_EMAIL, // sender address
-      to: email, // recipient email
-      subject: 'Welcome to GoGroove!', // Email subject
-      text: 'Your account has been successfully created.', // plain text body
-      html: htmlPage, // html body
+      from: process.env.USER_EMAIL,
+      to: email, 
+      subject: 'Welcome to GoGroove!', 
+      text: 'Your account has been successfully created.', 
+      html: htmlPage, 
     });
 
     console.log('Email sent: %s', info.messageId);
 
-    // Step 4: Proceed to next middleware or respond with success
     next();
 
   } catch (error) {
     console.log('Error occurred while sending email:', error.message);
-    res.status(500).send('Failed to send notification email.');
   }
 };
