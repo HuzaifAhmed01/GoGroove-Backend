@@ -13,9 +13,16 @@ const productSchema =  mongoose.Schema({
     images: { type: [String], default: [] },
     ratings: { type: Number, min: 0, max: 5, default: 0 }, 
     discount: { type: Number, min: 0, max: 100, default: 0 }, 
-    createdAt: { type: Date, default: Date.now }, 
-    updatedAt: { type: Date, default: Date.now }
-});
+    createdAt: { 
+        type: Date, 
+        default: Date.now, 
+        set: (value) => {
+            if (typeof value === 'string') {
+                return new Date(value.trim()); // Trim and convert to Date
+            }
+            return value;
+        }
+    },});
 
 
 
