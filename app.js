@@ -40,6 +40,8 @@ if (cluster.isPrimary) {
   app.use("/user", userRoutes);
   app.use("/products",productRoutes);
   // CREATING SERVER
+
+  
   app.listen(port, () => {
     console.log(`server listening at http://localhost:${port}`);
   });

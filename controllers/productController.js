@@ -1,20 +1,22 @@
 import uploadeImages from "../helpers/CloudinaryHelper.js";
+import generatingId from "../helpers/IdGenerator.js";
 import { productCreateService } from "../services/productServices.js";
 
-export const productCreateControllers = async (req, res) => {
+export const productCreateController = async (req, res) => {
   if (Object.keys(req.files).length === 0) {
     return res.status(400).json({ message: "please upload file" });
   }
-  
 
   if (Object.keys(req.body).length === 0) {
     return res.status(400).json({ message: "All fields are required" }); // Use 400 instead of 500
   }
 
   try {
-    const imagePaths = req.files.map(file => file.path);
+    let generatedId = generatingId("PROD");
+    req.body.productId = generatedId;
+    const imagePaths = req.files.map((file) => file.path);
     const uploadedImages = await uploadeImages(imagePaths);
-    req.body.images = uploadedImages.map(img=>img.secure_url);
+    req.body.images = uploadedImages.map((img) => img.secure_url);
 
     const newProduct = await productCreateService(req.body);
     if (newProduct) {
@@ -29,3 +31,7 @@ export const productCreateControllers = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" }); // Respond with 500 for unexpected errors
   }
 };
+
+export const productFindingController=async()=>{
+
+}

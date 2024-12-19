@@ -1,5 +1,5 @@
 import express from "express";
-import { productCreateControllers } from "../controllers/productController.js";
+import { productCreateController } from "../controllers/productController.js";
 import multer from "multer";
 
 let productRoutes = express.Router();
@@ -18,7 +18,7 @@ const uploads = multer({
 productRoutes.post(
   "/createProduct",
   uploads.array("images", 4),
-  productCreateControllers
+  productCreateController
 );
 
 export default productRoutes;

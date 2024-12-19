@@ -11,3 +11,15 @@ export let productCreateService = async (data) => {
     );
   }
 };
+
+export let findProductByIdService = async (id) => {
+  try {
+    let product = await productModel.findById(id);
+    if (!product) {
+      console.log("faild to find product in the service");
+    }
+    return product;
+  } catch (error) {
+    console.log("error occured while finding product by id" + error.message);
+  }
+};
