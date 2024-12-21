@@ -6,17 +6,19 @@ cloudinary.config({
   api_secret: process.env.api_secret,
 });
 
-let uploadeImages = async (imagesPaths, folderName = "Product-Images") => {
+let uploadImages = async (imagesPaths, folderName = "Product-Images") => {
   try {
-    let imagesUploading = await imagesPaths.map(async(path) => {
-      return await cloudinary.uploader.upload(path, { folder: folderName });
+    let imagesUploading = imagesPaths.map((path) => {
+      return cloudinary.uploader.upload(path, {
+        folder: folderName,});
     });
+
     let uploadedImages = await Promise.all(imagesUploading);
-    console.log("images uploaded successfully");
+    console.log("Images uploaded successfully:", uploadedImages);
     return uploadedImages;
   } catch (error) {
-    console.log("error occured while uploading images"+error.message);
+    console.error("Error occurred while uploading images: " + error.message);
   }
 };
 
-export default uploadeImages;
+export default uploadImages;

@@ -1,8 +1,12 @@
 import uploadeImages from "../helpers/CloudinaryHelper.js";
 import generatingId from "../helpers/IdGenerator.js";
-import { productCreateService } from "../services/productServices.js";
+import {
+  findProductByIdService,
+  productCreateService,
+  productDeleteService,
+} from "../services/productServices.js";
 
-export const productCreateController = async (req, res) => {
+export let productCreateController = async (req, res) => {
   if (Object.keys(req.files).length === 0) {
     return res.status(400).json({ message: "please upload file" });
   }
@@ -32,6 +36,38 @@ export const productCreateController = async (req, res) => {
   }
 };
 
-export const productFindingController=async()=>{
+export let productFindingController = async (req, res) => {
+  let id = req.params.id;
+  try {
+    let findProduct = await findProductByIdService(id);
+    if (!findProduct) {
+      res.status(404).json({ message: "faild to find product" });
+    }
+    res.status(200).json({ data: findProduct });
+  } catch (error) {
+    console.log(
+      "error occured while finding product by id from controllers" +
+        error.message
+    );
+    res.status(500).json({ message: "server error" });
+  }
+};
 
-}
+export let productDeleteController = async (req, res) => {
+  let { id } = req.params;
+
+  try {
+    let deletedProduct = await productDeleteService(id);
+    if (!deletedProduct) {
+      //IF PRODUCT NOT FOUND
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error(
+      "Error occurred while deleting product from controller: " + error.message
+    );
+    res.status(500).json({ message: "Server error" });
+  }
+};

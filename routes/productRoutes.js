@@ -1,5 +1,9 @@
 import express from "express";
-import { productCreateController } from "../controllers/productController.js";
+import {
+  productCreateController,
+  productDeleteController,
+  productFindingController,
+} from "../controllers/productController.js";
 import multer from "multer";
 
 let productRoutes = express.Router();
@@ -20,5 +24,8 @@ productRoutes.post(
   uploads.array("images", 4),
   productCreateController
 );
+
+productRoutes.get("/findProduct/:id", productFindingController);
+productRoutes.delete("/deleteProduct/:id",productDeleteController);
 
 export default productRoutes;

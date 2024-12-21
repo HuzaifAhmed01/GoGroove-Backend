@@ -1,5 +1,7 @@
 import { comparePasswords, HashPassword } from "../authentication/crypt.js";
 import { generatingToken } from "../authentication/jwt.js";
+import generatingId from "../helpers/IdGenerator.js";
+import { sendingEmailToUser } from "../helpers/sendEmail.js";
 import {
   findingUserByEmail,
   passwordUpdatingService,
@@ -8,37 +10,36 @@ import {
 
 //For SignUp
 export let userCreateController = async (req, res) => {
-  //DESTRUCTURING OF USER DETAILS FROM REQUEST.BODY
   let { firstName, lastName, email, password, phone } = req.body;
 
   try {
-    //FOR HASHING USER PASSWORD
-    let HashedPassword = await HashPassword(password);
+    let hashedPassword = await HashPassword(password);
+    req.body.password = hashedPassword;
 
-    //PASSING TO USER SERVICES FUNCTION IN SERVICES
-    let user = await userCreateService(
+    let userId = generatingId("USER");
+    let user = await userCreateService({
+      userId,
       firstName,
       lastName,
       email,
-      HashedPassword,
-      phone
-    );
+      password,
+      phone,
+    });
 
-    //GENERATING TOKEN FROM HERE
-    //SOME CONDITIONS FOR VALID RESPONSE
-    if (user) {
-      let token = generatingToken(email);
-      console.log(token);
-      return res.status(201).json({ token, name: user.firstName });
+    if (user.message) {
+      return res.status(409).json({ success: false, message: user.message });
     }
-    return res.status(500).json({ message: "user already exist" });
+
+    let token = generatingToken(user.email);  // Assuming this generates a valid token
+    sendingEmailToUser(user.email, user.firstName);
+    return res.status(201).json({ success: true, token, name: user.firstName });
   } catch (error) {
-    //ERROR HANDELING
-    console.log(
-      "error occured at controllers while creating user " + error.message
-    );
+    console.error("Error occurred in userCreateController: " + error.message);
+    return res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
+
+
 //For Login
 export let userLoginController = async (req, res) => {
   //Destructring user Details

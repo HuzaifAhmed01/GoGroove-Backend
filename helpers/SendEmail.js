@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export let createUserWithEmailNotification = async (req, res, next) => {
-  let { email, firstName, } = req.body; 
+export let sendingEmailToUser = async (email,firstName) => {
 
   try {
 
@@ -130,7 +129,6 @@ export let createUserWithEmailNotification = async (req, res, next) => {
 
     console.log('Email sent: %s', info.messageId);
 
-    next();
 
   } catch (error) {
     console.log('Error occurred while sending email:', error.message);

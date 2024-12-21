@@ -23,3 +23,16 @@ export let findProductByIdService = async (id) => {
     console.log("error occured while finding product by id" + error.message);
   }
 };
+
+export let productDeleteService = async (id) => {
+  try {
+    let deleteProduct = await productModel.findByIdAndDelete(id);
+    if (!deleteProduct) console.log("failed to delet from services");
+    console.log("product Deleted successfully");
+    return deleteProduct;
+  } catch (error) {
+    console.log(
+      "error occured while deleting product from services" + error.message
+    );
+  }
+};

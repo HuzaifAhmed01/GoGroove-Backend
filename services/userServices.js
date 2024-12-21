@@ -1,35 +1,26 @@
 import userModel from "../model/userModel.js";
 
 //for user Create
-export let userCreateService = async (
-  firstName,
-  lastName,
-  email,
-  password,
-  phone
-) => {
-  try {
-    let user = await userModel.findOne({ email });
 
-    if (!user) {
-    
-      let newUser = await userModel({
-        firstName,
-        lastName,
-        email,
-        password,
-        phone,
-      });
-      let savedUser = await newUser.save();
-      return savedUser;
+export let userCreateService = async (data) => {
+  try {
+    let user = await userModel.findOne({ email: data.email });
+
+    if (user) {
+      return { message: "User already exists" };  // Return a meaningful response
     }
+
+    let newUser = await userModel({ ...data });
+    console.log(...data + ' from services');
+    let savedUser = await newUser.save();
+    return savedUser;
   } catch (error) {
     console.log(
-      "error occurred while creating user at services: " + error.message
+      "Error occurred while creating user at services: " + error.message
     );
-    return error;
   }
 };
+
 
 export let findingUserByEmail = async (email) => {
   try {
