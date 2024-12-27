@@ -19,6 +19,7 @@ const uploads = multer({
   }),
 });
 
+
 productRoutes.post(
   "/createProduct",
   uploads.array("images", 4),

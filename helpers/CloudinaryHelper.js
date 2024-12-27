@@ -1,16 +1,20 @@
 import cloudinary from "cloudinary";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 cloudinary.config({
-  cloud_name: process.env.cloud_name,
-  api_key: process.env.api_key,
-  api_secret: process.env.api_secret,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 let uploadImages = async (imagesPaths, folderName = "Product-Images") => {
   try {
     let imagesUploading = imagesPaths.map((path) => {
       return cloudinary.uploader.upload(path, {
-        folder: folderName,});
+        folder: folderName,
+      });
     });
 
     let uploadedImages = await Promise.all(imagesUploading);

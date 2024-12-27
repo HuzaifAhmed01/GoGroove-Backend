@@ -19,8 +19,8 @@ export let productCreateController = async (req, res) => {
     let generatedId = generatingId("PROD");
     req.body.productId = generatedId;
     const imagePaths = req.files.map((file) => file.path);
-    const uploadedImages = await uploadeImages(imagePaths);
-    req.body.images = uploadedImages.map((img) => img.secure_url);
+    const uploadedImages = await uploadeImages(imagePaths);  // here the img path is going in the cloudeinary function 
+    req.body.images = uploadedImages.map((img) => img.secure_url); // destructure and assigning the value in 
 
     const newProduct = await productCreateService(req.body);
     if (newProduct) {

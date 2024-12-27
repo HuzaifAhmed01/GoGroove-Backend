@@ -14,15 +14,16 @@ export let userCreateController = async (req, res) => {
 
   try {
     let hashedPassword = await HashPassword(password);
-    req.body.password = hashedPassword;
+    console.log(hashedPassword);
 
     let userId = generatingId("USER");
+    console.log(userId);
     let user = await userCreateService({
       userId,
       firstName,
       lastName,
       email,
-      password,
+      password:hashedPassword,
       phone,
     });
 
@@ -46,18 +47,18 @@ export let userLoginController = async (req, res) => {
   let { email, password } = req.body;
 
   try {
-    let DBPassword = await findingUserByEmail(email);
+    let dbUser = await findingUserByEmail(email);
     let newPassword = password;
 
     let comparePassword = await comparePasswords(
       newPassword,
-      DBPassword.password
+      dbUser.password
     );
 
     if (comparePassword) {
       // Generating Token
-      let token = generatingToken(email);
-      res.status(200).send("Login Successful :  " + token);
+      let token = generatingToken(dbUser.email);
+      return res.status(201).json({ success: true, token, name: dbUser.firstName });
     } else {
       res.status(400).send("Invalid Email or Password");
     }

@@ -11,7 +11,6 @@ export let userCreateService = async (data) => {
     }
 
     let newUser = await userModel({ ...data });
-    console.log(...data + ' from services');
     let savedUser = await newUser.save();
     return savedUser;
   } catch (error) {
