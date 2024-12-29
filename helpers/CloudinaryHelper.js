@@ -9,7 +9,10 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-let uploadImages = async (imagesPaths, folderName = "Product-Images") => {
+export let uploadeImages = async (
+  imagesPaths,
+  folderName = "Product-Images"
+) => {
   try {
     let imagesUploading = imagesPaths.map((path) => {
       return cloudinary.uploader.upload(path, {
@@ -18,11 +21,20 @@ let uploadImages = async (imagesPaths, folderName = "Product-Images") => {
     });
 
     let uploadedImages = await Promise.all(imagesUploading);
-    console.log("Images uploaded successfully:", uploadedImages);
+    // console.log("Images uploaded successfully:", uploadedImages);
     return uploadedImages;
   } catch (error) {
     console.error("Error occurred while uploading images: " + error.message);
   }
 };
 
-export default uploadImages;
+export let deleteImagesFromCloude = async (public_id) => {
+  try {
+    await cloudinary.uploader.destroy(public_id);
+    return "success";
+  } catch (error) {
+    console.log(
+      "error occured while deleting uploaded images on the cloudinary"
+    );
+  }
+};
