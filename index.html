@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Input Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Product Input Form</h2>
+    <form action="http://localhost:5800/products/createProduct" method="POST" enctype="multipart/form-data">
+        <!-- Product Name -->
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="productName" placeholder="Enter product name" required>
+
+        <!-- Product Description -->
+        <label for="productDescription">Product Description:</label>
+        <textarea id="productDescription" name="productDescription" rows="5" placeholder="Enter product description" required></textarea>
+
+        <!-- Brand -->
+        <label for="brand">Brand:</label>
+        <input type="text" id="brand" name="brand" placeholder="Enter brand name" required>
+
+        <!-- Model -->
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model" placeholder="Enter model name or number" required>
+
+        <!-- MRP -->
+        <label for="mrp">MRP:</label>
+        <input type="number" id="mrp" name="mrp" placeholder="Enter maximum retail price" required>
+
+        <!-- Offer Price -->
+        <label for="offerPrice">Offer Price:</label>
+        <input type="number" id="offerPrice" name="offerPrice" placeholder="Enter discounted price" required>
+
+        <!-- Category -->
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" placeholder="Enter product category" required>
+
+        <!-- Stock -->
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" placeholder="Enter stock quantity" required>
+
+        <!-- Images -->
+        <label for="images">Product Images:</label>
+        <input type="file" id="images" name="images" multiple accept="image/*" required>
+
+        <!-- Ratings -->
+        <label for="ratings">Ratings:</label>
+        <input type="number" id="ratings" name="ratings" step="0.1" min="0" max="5" placeholder="Enter product rating (e.g., 4.5)" required>
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
