@@ -1,5 +1,6 @@
 import generatingId from "../helpers/IdGenerator.js";
 import {
+  allProductfindingService,
   findProductByIdService,
   productCreateService,
   productDeleteService,
@@ -32,6 +33,7 @@ export let productCreateController = async (req, res) => {
 
     const newProduct = await productCreateService(req.body);
     if (newProduct) {
+      console.log("product inserted");
       return res
         .status(201)
         .json({ message: `Product created successfully`, product: newProduct });
@@ -72,7 +74,7 @@ export let productDeleteController = async (req, res) => {
     let deletingImages = product.images.map((image) => {
       deleteImagesFromCloude(image.public_id); // passing public id to cloudinary to delete img with map cause contain array of imgs
     });
-    await Promise.all(deletingImages);  // resolving all promise which 
+    await Promise.all(deletingImages); // resolving all promise which
     let deleteProduct = await productDeleteService(productId);
     if (deleteProduct) {
       return res.status(200).json({ message: "Product deleted successfully" });
@@ -84,5 +86,19 @@ export let productDeleteController = async (req, res) => {
       "Error occurred while deleting product from controller: " + error.message
     );
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export let allProductFindingController = async (req, res) => {
+  try {
+    let allData = await allProductfindingService();
+    if (!allData) {
+      res.status(400).json({ message: "failed to find product" });
+    }
+    console.log("success");
+    res.status(200).json({ data: allData });
+  } catch (error) {
+    console.log("error occured while finding all product " + error.message);
+    res.status(500).json({ message: "server error" });
   }
 };

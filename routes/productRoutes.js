@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  allProductFindingController,
   productCreateController,
   productDeleteController,
   productFindingController,
@@ -19,7 +20,6 @@ const uploads = multer({
   }),
 });
 
-
 productRoutes.post(
   "/createProduct",
   uploads.array("images", 4),
@@ -27,6 +27,7 @@ productRoutes.post(
 );
 
 productRoutes.get("/findProduct/:id", productFindingController);
-productRoutes.delete("/deleteProduct/:id",productDeleteController);
+productRoutes.delete("/deleteProduct/:id", productDeleteController);
+productRoutes.get("/allProducts", allProductFindingController);
 
 export default productRoutes;

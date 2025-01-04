@@ -12,6 +12,15 @@ export let productCreateService = async (data) => {
   }
 };
 
+export let allProductfindingService = async () => {
+  try {
+    let alldata = await productModel.find();
+    return alldata;
+  } catch (error) {
+    console.log("error occured while finding all product" + error.message);
+  }
+};
+
 export let findProductByIdService = async (id) => {
   try {
     let product = await productModel.findById(id);
