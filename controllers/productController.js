@@ -53,7 +53,7 @@ export let productFindingController = async (req, res) => {
     if (!findProduct) {
       res.status(404).json({ message: "faild to find product" });
     }
-    res.status(200).json({ data: findProduct });
+    res.status(200).json({ product: findProduct });
   } catch (error) {
     console.log(
       "error occured while finding product by id from controllers" +
@@ -95,9 +95,12 @@ export let allProductFindingController = async (req, res) => {
     if (!allData) {
       res.status(400).json({ message: "failed to find product" });
     }
-    console.log("success");
-    res.status(200).json({ data: allData });
-  } catch (error) {
+    return res.status(200).json({ 
+      success: true, 
+      message: "Products retrieved successfully", 
+      allProducts: allData 
+  });
+    } catch (error) {
     console.log("error occured while finding all product " + error.message);
     res.status(500).json({ message: "server error" });
   }
