@@ -27,6 +27,7 @@ productRoutes.post(
 );
 
 productRoutes.get("/findProduct/:id", productFindingController);
+productRoutes.get("/searchProducts");
 productRoutes.delete("/deleteProduct/:id", productDeleteController);
 productRoutes.get("/allProducts", allProductFindingController);
 

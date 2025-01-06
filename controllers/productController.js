@@ -46,6 +46,12 @@ export let productCreateController = async (req, res) => {
   }
 };
 
+export let productSearchingControllers = async(req,res)=>{
+  
+  let {keys}=req.query;
+
+}
+
 export let productFindingController = async (req, res) => {
   let id = req.params.id;
   try {
