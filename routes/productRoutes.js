@@ -4,6 +4,7 @@ import {
   productCreateController,
   productDeleteController,
   productFindingController,
+  productSearchingController,
 } from "../controllers/productController.js";
 import multer from "multer";
 
@@ -27,7 +28,7 @@ productRoutes.post(
 );
 
 productRoutes.get("/findProduct/:id", productFindingController);
-productRoutes.get("/searchProducts");
+productRoutes.get("/searchProducts/:keys",productSearchingController);
 productRoutes.delete("/deleteProduct/:id", productDeleteController);
 productRoutes.get("/allProducts", allProductFindingController);
 

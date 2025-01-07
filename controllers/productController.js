@@ -10,6 +10,7 @@ import {
   deleteImagesFromCloude,
   uploadeImages,
 } from "../helpers/CloudinaryHelper.js";
+import productModel from "../model/productModel.js";
 
 export let productCreateController = async (req, res) => {
   if (Object.keys(req.files).length === 0) {
@@ -46,11 +47,22 @@ export let productCreateController = async (req, res) => {
   }
 };
 
-export let productSearchingControllers = async(req,res)=>{
-  
-  let {keys}=req.query;
-
-}
+export const productSearchingController = async (req, res) => {
+  try {
+    let searchedItems = await productModel.find({
+      $or: [{ name: { $regex: req.params.keys } }],
+    });
+    if (!searchedItems) {
+      res.status(400).json({ message: "cannot find product" });
+    }
+    console.log(searchedItems);
+    res
+      .status(200)
+      .json({ success: true, message: "product found", data: searchedItems });
+  } catch (error) {
+    console.log("error occured while searching product in the controllers");
+  }
+};
 
 export let productFindingController = async (req, res) => {
   let id = req.params.id;
@@ -101,12 +113,12 @@ export let allProductFindingController = async (req, res) => {
     if (!allData) {
       res.status(400).json({ message: "failed to find product" });
     }
-    return res.status(200).json({ 
-      success: true, 
-      message: "Products retrieved successfully", 
-      allProducts: allData 
-  });
-    } catch (error) {
+    return res.status(200).json({
+      success: true,
+      message: "Products retrieved successfully",
+      allProducts: allData,
+    });
+  } catch (error) {
     console.log("error occured while finding all product " + error.message);
     res.status(500).json({ message: "server error" });
   }

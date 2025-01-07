@@ -33,6 +33,19 @@ export let findProductByIdService = async (id) => {
   }
 };
 
+
+// export const productSearchingService = async (query) => {
+//   try {
+//     // Fetch products that match the search query\
+//     let searchedItems = await productModel.find(query);
+//     return searchedItems;
+//   } catch (error) {
+//     console.error("Error in productSearchingService:", error.message);
+//     throw error;  // Let the controller handle the error
+//   }
+// };
+
+
 export let productDeleteService = async (id) => {
   try {
     let deleteProduct = await productModel.findByIdAndDelete(id);
