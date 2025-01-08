@@ -4,14 +4,15 @@ import {
   findProductByIdService,
   productCreateService,
   productDeleteService,
+  productSearchingService,
 } from "../services/productServices.js";
 
 import {
   deleteImagesFromCloude,
   uploadeImages,
 } from "../helpers/CloudinaryHelper.js";
-import productModel from "../model/productModel.js";
 
+// for creating product
 export let productCreateController = async (req, res) => {
   if (Object.keys(req.files).length === 0) {
     return res.status(400).json({ message: "please upload file" });
@@ -46,24 +47,7 @@ export let productCreateController = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" }); // Respond with 500 for unexpected errors
   }
 };
-
-export const productSearchingController = async (req, res) => {
-  try {
-    let searchedItems = await productModel.find({
-      $or: [{ name: { $regex: req.query.chars, $options:'i' } }],
-    });
-    if (!searchedItems) {
-      res.status(400).json({ message: "cannot find product" });
-    }
-    console.log(searchedItems);
-    res
-      .status(200)
-      .json({ success: true, message: "product found", data: searchedItems });
-  } catch (error) {
-    console.log("error occured while searching product in the controllers");
-  }
-};
-
+// for finding product by id
 export let productFindingController = async (req, res) => {
   let id = req.params.id;
   try {
@@ -80,7 +64,25 @@ export let productFindingController = async (req, res) => {
     res.status(500).json({ message: "server error" });
   }
 };
+// for searching product by keys
+export const productSearchingController = async (req, res) => {
+  try {
+    let searchingRegex = {
+      $or: [{ productName: { $regex: req.query.keys.trim(), $options: "i" } }],
+    };
 
+    let searchedItems = await productSearchingService(searchingRegex);
+    if (!searchedItems) {
+      res.status(400).json({ message: "cannot find product" });
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "product found", data: searchedItems });
+  } catch (error) {
+    console.log("error occured while searching product in the controllers");
+  }
+};
+// for deleting product by id
 export let productDeleteController = async (req, res) => {
   let productId = req.params.id;
 
@@ -106,7 +108,7 @@ export let productDeleteController = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
+// for finding all products 
 export let allProductFindingController = async (req, res) => {
   try {
     let allData = await allProductfindingService();
