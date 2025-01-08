@@ -50,7 +50,7 @@ export let productCreateController = async (req, res) => {
 export const productSearchingController = async (req, res) => {
   try {
     let searchedItems = await productModel.find({
-      $or: [{ name: { $regex: req.params.keys } }],
+      $or: [{ name: { $regex: req.query.chars, $options:'i' } }],
     });
     if (!searchedItems) {
       res.status(400).json({ message: "cannot find product" });
