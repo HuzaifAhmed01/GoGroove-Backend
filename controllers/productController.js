@@ -67,8 +67,10 @@ export let productFindingController = async (req, res) => {
 // for searching product by keys
 export const productSearchingController = async (req, res) => {
   try {
+    // console.log('from controllers '+req.query.keys);
     let searchingRegex = {
-      $or: [{ productName: { $regex: req.query.keys.trim(), $options: "i" } }],
+      $or: [{ productName: { $regex: req.query.keys, $options: "i" } }],
+
     };
 
     let searchedItems = await productSearchingService(searchingRegex);
@@ -79,7 +81,7 @@ export const productSearchingController = async (req, res) => {
       .status(200)
       .json({ success: true, message: "product found", data: searchedItems });
   } catch (error) {
-    console.log("error occured while searching product in the controllers");
+    console.log("error occured while searching product in the controllers"+error.message);
   }
 };
 // for deleting product by id
